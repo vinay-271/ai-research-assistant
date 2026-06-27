@@ -1,9 +1,19 @@
+import chromadb
+import uuid
+import os
 from app.config.database import db
 from app.services.embedding_service import (
     create_embedding
 )
 
-#store the doc
+# Initialize ChromaDB persistent client in the workspace root
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+CHROMA_DB_PATH = os.path.join(BASE_DIR, "chroma_db")
+chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
+
+# Get or create the collection
+collection = chroma_client.get_or_create_collection(name="financial_docs")
+
 
 async def store_document(
     symbol: str,
@@ -12,45 +22,50 @@ async def store_document(
 ):
     embedding = create_embedding(text)
 
+    # Store in MongoDB (original behavior)
     document = {
-        "symbol": symbol,
+        "symbol": symbol.upper(),
         "source": source,
         "text": text,
         "embedding": embedding
     }
-
     await db.embeddings.insert_one(document)
 
-#search the stored doc
+    # Store in ChromaDB
+    doc_id = str(uuid.uuid4())
+    collection.add(
+        embeddings=[embedding],
+        documents=[text],
+        metadatas=[{"symbol": symbol.upper(), "source": source}],
+        ids=[doc_id]
+    )
 
-async def search_documents(query: str):
 
+async def search_documents(query: str, symbol: str = None):
     query_embedding = create_embedding(query)
 
-    pipeline = [
-        {
-            "$vectorSearch": {
-                "index": "autoembed_index",
-                "path": "embedding",
-                "queryVector": query_embedding,
-                "numCandidates": 10,
-                "limit": 3
-            }
-        }
-    ]
+    # Build filter if symbol is provided
+    where_filter = None
+    if symbol:
+        where_filter = {"symbol": symbol.upper()}
+
+    # Query ChromaDB for top 10 candidates
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=10,
+        where=where_filter
+    )
 
     documents = []
+    if results and "documents" in results and results["documents"] and len(results["documents"]) > 0:
+        doc_texts = results["documents"][0]
+        metadatas = results["metadatas"][0]
 
-    async for doc in db.embeddings.aggregate(
-        pipeline
-    ):
-        doc["_id"] = str(doc["_id"])
-        documents.append(
-        {
-            "symbol": doc["symbol"],
-            "source": doc["source"],
-            "text": doc["text"]
-        }
-    )
+        for text, meta in zip(doc_texts, metadatas):
+            documents.append({
+                "symbol": meta.get("symbol"),
+                "source": meta.get("source"),
+                "text": text
+            })
 
     return documents
