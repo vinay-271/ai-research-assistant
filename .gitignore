@@ -9,3 +9,5 @@ __pycache__/
 #ide files
 .idea/
 .vscode/
+#local vector database
+chroma_db/
