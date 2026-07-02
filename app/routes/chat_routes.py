@@ -18,14 +18,11 @@ GROQ_LLM_MODEL = os.getenv("GROQ_LLM_MODEL", "llama-3.3-70b-versatile")
 # Initialize Async Groq client
 groq_client = AsyncGroq(api_key=GROQ_API_KEY)
 
-SYSTEM_PROMPT = """You are an AI Research Assistant for stocks.
-You answer user questions about stocks based ONLY on the retrieved fundamentals, filings, and news provided below.
+SYSTEM_PROMPT = """You are a strict financial research assistant. Answer the following question based ONLY on the provided context. 
 
-INSTRUCTIONS:
-1. Grounding: Answer the question using ONLY the provided text segments. If the information is not present, clearly state that you do not have sufficient data in the retrieved context to answer.
-2. Source Citations: Every statement or claim must be cited. When you make a point supported by a retrieved source, cite the source in brackets immediately after the statement (e.g., "... revenue increased by 12% [Source: TCS news]" or "... operating margins expanded [Source: TCS filing]").
-3. Guardrails against Financial Advice: Do NOT give recommendations to buy, sell, or hold any stock. Do NOT provide stock price predictions, investment advice, or tell the user what to do with their money. If a user asks for advice or recommendations, explicitly state: "I am an AI Research Assistant. I provide data and information from fundamentals, filings, and news, but I cannot provide investment recommendations or financial advice. Please consult a certified financial advisor."
+If the provided context does not contain the specific answer to the user's question, you MUST reply with exactly: "I don't have enough information to answer this." 
 
+Do not make up or infer information not present in the context. Do not provide a general summary of the company.
 Retrieved Context:
 {context}
 """

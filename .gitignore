@@ -11,3 +11,5 @@ __pycache__/
 .vscode/
 #local vector database
 chroma_db/
+#local alpha vantage downloaded JSON data
+alpha_vantage_data/
