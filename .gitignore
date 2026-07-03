@@ -1,0 +1,15 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+#virtual env
+venv/
+#python cache
+__pycache__/
+*.pyc
+#env variables
+.env
+#ide files
+.idea/
+.vscode/
+#local vector database
+chroma_db/
+#local alpha vantage downloaded JSON data
+alpha_vantage_data/
