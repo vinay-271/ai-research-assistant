@@ -6,6 +6,7 @@ from app.routes.filing_routes import router as filing_router
 from app.routes.chat_routes import (
     router as chat_router
 )
+from app.services.rag_service import collection
 #create_embedding is temp
 from app.services.embedding_service import (
     create_embedding
@@ -83,3 +84,26 @@ async def test_search():
     )
 
     return docs
+
+#temporary chroma testing
+@app.get("/test-chroma")
+async def test_chroma():
+    return {
+        "count": collection.count()
+    }
+
+#temporary adding the meta-data-test
+@app.get("/test-meta")
+async def test_meta():
+    data = collection.get(limit=5)
+    return data
+
+#another api endpoint and I'm crying at this point
+@app.get("/test-symbol/{symbol}")
+async def test_symbol(symbol: str):
+    data = collection.get(
+        where={"symbol": symbol.upper()}
+    )
+    return {
+        "count": len(data["ids"])
+    }

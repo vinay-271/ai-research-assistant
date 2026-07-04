@@ -67,5 +67,13 @@ async def search_documents(query: str, symbol: str = None):
                 "source": meta.get("source"),
                 "text": text
             })
+    #temporary adding to check
+    print("\n========== SEARCH DEBUG ==========")
+    print("Question:", query)
+    print("Symbol filter:", where_filter)
+    print("Results count:", len(documents))
+    print("Documents:", documents)
+    print("=================================\n")
+    #temporary adding over
 
     return documents
