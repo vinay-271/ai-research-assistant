@@ -110,7 +110,3 @@ Money Logix is a premium, end-to-end AI-powered financial research assistant. It
 - **Chat Workspace**: High-fidelity messaging system with user message bubbles, assistant streaming answers, data tables with success-green (`+YoY`) and danger-red (`-YoY`) change indicators, and quick action chips.
 
 ---
-
-## 🛡️ License
-
-This project is licensed under the MIT License. All rights reserved.
