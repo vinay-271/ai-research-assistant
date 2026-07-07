@@ -414,7 +414,7 @@ function App() {
               <div className="promo-wave"></div>
             </div>
             <div className="sidebar-footer">
-              <p>© 2025 Money Logix</p>
+              <p>© 2026 Money Logix</p>
               <p>All rights reserved.</p>
             </div>
           </div>
@@ -425,7 +425,7 @@ function App() {
           {/* Header */}
           <header className="main-header">
             <div className="header-left">
-              <h1>Good morning, Analyst 👋</h1>
+              <h1>Greetings, Analyst 👋</h1>
               <p>Ask anything about companies, financials, markets and more.</p>
             </div>
             <div className="header-right">
