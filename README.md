@@ -4,7 +4,7 @@ An AI-powered financial research assistant that enables users to ask natural lan
 
 ---
 
-## 🚀 Features
+## 🚀 Features:
 
 - 🤖 AI-powered financial question answering
 - 📈 Company-specific analysis
